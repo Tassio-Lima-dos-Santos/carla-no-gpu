@@ -11,6 +11,10 @@ from pygame.locals import K_TAB
 from pygame.locals import K_h
 from pygame.locals import K_i
 from pygame.locals import K_q
+from pygame.locals import K_w
+from pygame.locals import K_a
+from pygame.locals import K_s
+from pygame.locals import K_d
 
 
 MAP_DEFAULT_SCALE = 0.1
@@ -47,11 +51,21 @@ class InputControl(object):
 
     def tick(self, clock):
         """Executed each frame. Calls method for parsing input."""
-        self.parse_input(clock)
+        return self.parse_input(clock)
 
     def _parse_events(self):
         """Parses input events. These events are executed only once when pressing a key."""
+        throttle_n_steer = [0, 0]
         self.mouse_pos = pygame.mouse.get_pos()
+        keys=pygame.key.get_pressed()
+        if keys[K_w]:
+            throttle_n_steer[0] = 1;
+        if keys[K_s]:
+            throttle_n_steer[0] = -1;
+        if keys[K_a]:
+            throttle_n_steer[1] = -1;
+        if keys[K_d]:
+            throttle_n_steer[1] = 1;
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit_game()
@@ -79,6 +93,7 @@ class InputControl(object):
                     self._hud.show_info = not self._hud.show_info
                 elif event.key == K_i:
                     self._world.show_actor_ids = not self._world.show_actor_ids
+                    
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 # Handle mouse wheel for zooming in and out
@@ -90,6 +105,7 @@ class InputControl(object):
                     self.wheel_offset -= self.wheel_amount
                     if self.wheel_offset <= 0.1:
                         self.wheel_offset = 0.1
+        return throttle_n_steer
 
     def _parse_mouse(self):
         """Parses mouse input"""
@@ -101,8 +117,8 @@ class InputControl(object):
 
     def parse_input(self, clock):
         """Parses the input, which is classified in keyboard events and mouse"""
-        self._parse_events()
         self._parse_mouse()
+        return self._parse_events()
 
     @staticmethod
     def _is_quit_shortcut(key):

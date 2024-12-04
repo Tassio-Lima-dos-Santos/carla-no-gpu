@@ -51,9 +51,8 @@ def game_loop(args):
 
             # Tick all modules
             world.tick(clock)
-            hero.tick(clock)
             hud.tick(clock)
-            input_control.tick(clock)
+            hero.tick(input_control.tick(clock), clock)
 
             # Render all modules
             display.fill(COLOR_ALUMINIUM_4)
@@ -101,7 +100,7 @@ def main():
     argparser.add_argument(
         "--timeout",
         metavar="X",
-        default=4.0,
+        default=10.0,
         type=float,
         help="Timeout duration (default: 2.0s)",
     )

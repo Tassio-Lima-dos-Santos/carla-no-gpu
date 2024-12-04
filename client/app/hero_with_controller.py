@@ -17,7 +17,7 @@ class Hero(object):
         spawn_point = carla.Transform(
             carla.Location(x=-114.6, y=24.5, z=0.6), carla.Rotation(yaw=0.0)
         )
-        self.actor = self.world.spawn_hero("vehicle.audi.tt", spawn_point)
+        self.actor = self.world.spawn_hero(blueprint_filter=world.args.filter)
 
         self.waypoints = [
             carla.Location(x=-74.6, y=24.5, z=0.6),
