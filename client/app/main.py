@@ -100,7 +100,7 @@ def main():
     argparser.add_argument(
         "--timeout",
         metavar="X",
-        default=10.0,
+        default=20.0,
         type=float,
         help="Timeout duration (default: 2.0s)",
     )
