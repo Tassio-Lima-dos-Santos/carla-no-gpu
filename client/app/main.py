@@ -8,6 +8,8 @@ from .input_control import InputControl
 
 from .color import *
 
+height = 720
+width = 1280
 
 def game_loop(args):
     """Initialized, Starts and runs all the needed modules for No Rendering Mode"""
@@ -16,7 +18,7 @@ def game_loop(args):
         # Init Pygame
         pygame.init()
         display = pygame.display.set_mode(
-            (args.width, args.height), pygame.HWSURFACE | pygame.DOUBLEBUF
+            (width, height), pygame.HWSURFACE | pygame.DOUBLEBUF
         )
 
         # Place a title to game window
@@ -27,12 +29,12 @@ def game_loop(args):
         text_surface = font.render("Rendering map...", True, COLOR_WHITE)
         display.blit(
             text_surface,
-            text_surface.get_rect(center=(args.width / 2, args.height / 2)),
+            text_surface.get_rect(center=(width / 2, height / 2)),
         )
         pygame.display.flip()
 
         # Init
-        hud = InfoBar(args.width, args.height)
+        hud = InfoBar(width, height)
         input_control = InputControl()
         world = World(args)
         hero = Hero()
@@ -120,7 +122,7 @@ def main():
     # Parse arguments
     args = argparser.parse_args()
     args.description = "BounCMPE CarlaSim 2D Visualizer"
-    args.width, args.height = [int(x) for x in args.res.split("x")]
+    # width, height = [int(x) for x in args.res.split("x")]
 
     # Run game loop
     game_loop(args)
