@@ -28,6 +28,29 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         xserver-xorg \
         libomp5 \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* 
+    
+# Install ROS Foxy 
+RUN sudo apt update && sudo apt install locales \
+&& sudo locale-gen en_US en_US.UTF-8 \
+&& sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
+&& export LANG=en_US.UTF-8 \
+&& sudo apt install software-properties-common \
+&& sudo add-apt-repository universe \
+&& sudo apt update && sudo apt install curl -y \
+&& sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
+ -o /usr/share/keyrings/ros-archive-keyring.gpg \
+&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null \
+&& sudo apt update && sudo apt upgrade \
+&& sudo apt install ros-foxy-ros-base python3-argcomplete \
+&& sudo apt install ros-dev-tools # Installing ROS dev tools
+
+# Install ROS Bridge
+RUN mkdir -p ~/carla-ros-bridge && cd ~/carla-ros-bridge \
+&& git clone --recurse-submodules https://github.com/carla-simulator/ros-bridge.git src/ros-bridge \
+&& source /opt/ros/foxy/setup.bash \
+&& rosdep update \
+&& rosdep install --from-paths src --ignore-src -r \
+&& colcon build
 
 # Make server ports accessible outside container
 EXPOSE 2000-2002
@@ -41,6 +64,13 @@ RUN groupadd work -g 1000 \
 USER carla
 WORKDIR /home/carla/
 
-# Run the server by default
+# Run the server
+RUN source /opt/carla-simulator/CarlaUE4.sh \
+&& export CARLA_ROOT=/home/carla/ \
+&& export PYTHONPATH=$PYTHONPATH:$CARLA_ROOT/PythonAPI/carla/dist/carla-${CARLA_RELEASE}-py3.8-linux-x86_64.egg:$CARLA_ROOT/PythonAPI/carla \
+&& source ./install/setup.bash
+
+RUN ros2 launch carla_ros_bridge carla_ros_bridge.launch.py
+
 ENTRYPOINT ["/opt/carla-simulator/CarlaUE4.sh"]
 
