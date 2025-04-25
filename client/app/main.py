@@ -104,7 +104,7 @@ def main():
         metavar="X",
         default=20.0,
         type=float,
-        help="Timeout duration (default: 2.0s)",
+        help="Timeout duration (default: 20.0s)",
     )
     argparser.add_argument(
         "--res",
