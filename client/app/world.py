@@ -16,6 +16,8 @@ PIXELS_PER_METER = 12
 HERO_DEFAULT_SCALE = 1.0
 PIXELS_AHEAD_VEHICLE = 150
 
+argswidth = 1280
+argsheight = 720
 
 def get_actor_display_name(actor, truncate=250):
     name = " ".join(actor.type_id.replace("_", ".").title().split(".")[1:])
@@ -664,7 +666,7 @@ class World(object):
 
         self._input = None
 
-        self.dim = (args.width, args.height)
+        self.dim = (argswidth, argsheight)
         self.surface_size = [0, 0]
         self.prev_scaled_size = 0
         self.scaled_size = 0
