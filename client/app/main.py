@@ -8,9 +8,6 @@ from .input_control import InputControl
 
 from .color import *
 
-height = 720
-width = 1280
-
 def game_loop(args):
     """Initialized, Starts and runs all the needed modules for No Rendering Mode"""
     try:
@@ -18,7 +15,7 @@ def game_loop(args):
         # Init Pygame
         pygame.init()
         display = pygame.display.set_mode(
-            (width, height), pygame.HWSURFACE | pygame.DOUBLEBUF
+            (args.width, args.height), pygame.HWSURFACE | pygame.DOUBLEBUF
         )
 
         # Place a title to game window
@@ -121,6 +118,12 @@ def main():
 
     # Parse arguments
     args = argparser.parse_args()
+    try:
+        args.width, args.height = map(int, args.res.split("x"))
+    except Exception:
+        print("Erro: resolução deve estar no formato WIDTHxHEIGHT (ex: 1280x720)")
+        exit(1)
+
     args.description = "BounCMPE CarlaSim 2D Visualizer"
     # width, height = [int(x) for x in args.res.split("x")]
 
