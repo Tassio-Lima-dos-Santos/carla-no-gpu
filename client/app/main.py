@@ -8,11 +8,9 @@ from .input_control import InputControl
 
 from .color import *
 
-height = 720
-width = 1280
-
 def game_loop(args):
     """Initialized, Starts and runs all the needed modules for No Rendering Mode"""
+    hero = None
     try:
 
         # Init Pygame
@@ -29,7 +27,7 @@ def game_loop(args):
         text_surface = font.render("Rendering map...", True, COLOR_WHITE)
         display.blit(
             text_surface,
-            text_surface.get_rect(center=(width / 2, height / 2)),
+            text_surface.get_rect(center=(args.width / 2, args.height / 2)),
         )
         pygame.display.flip()
 
