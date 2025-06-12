@@ -8,11 +8,13 @@ from .input_control import InputControl
 
 from .color import *
 
+
 def game_loop(args):
     """Initialized, Starts and runs all the needed modules for No Rendering Mode"""
+    # SOLUÇÃO: Inicializar hero antes do bloco try
     hero = None
+    
     try:
-
         # Init Pygame
         pygame.init()
         display = pygame.display.set_mode(
@@ -102,7 +104,7 @@ def main():
         metavar="X",
         default=20.0,
         type=float,
-        help="Timeout duration (default: 20.0s)",
+        help="Timeout duration (default: 2.0s)",
     )
     argparser.add_argument(
         "--res",
@@ -120,12 +122,7 @@ def main():
     # Parse arguments
     args = argparser.parse_args()
     args.description = "BounCMPE CarlaSim 2D Visualizer"
-    try:
-        args.width, args.height = map(int, args.res.split("x"))
-    except Exception:
-        print("Erro: resolução deve estar no formato WIDTHxHEIGHT (ex: 1280x720)")
-        exit(1)
-    # width, height = [int(x) for x in args.res.split("x")]
+    args.width, args.height = [int(x) for x in args.res.split("x")]
 
     # Run game loop
     game_loop(args)
