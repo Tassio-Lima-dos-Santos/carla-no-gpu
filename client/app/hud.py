@@ -96,16 +96,9 @@ class InfoBar(object):
 
     def _init_params(self):
         """Initialized visual parameters such as font text and size"""
-        font_name = "courier" if os.name == "nt" else "mono"
-        fonts = [x for x in pygame.font.get_fonts() if font_name in x]
-        default_font = "ubuntumono"
-
-        # Correção: fallback se nenhuma fonte for encontrada
-        if not fonts:
-            fonts = [default_font]
-
-        mono = default_font if default_font in fonts else fonts[0]
-        mono = pygame.font.match_font(mono)
+        # SOLUÇÃO: Usar fonte fixa garantida em vez de tentar detectar
+        mono = 'freesans'  # Fonte padrão do PyGame que sempre existe
+        
         self._font_mono = pygame.font.Font(mono, 14)
         self._header_font = pygame.font.SysFont("Arial", 14, True)
         self.help = HelpText(pygame.font.Font(mono, 24), *self.dim)
@@ -114,7 +107,6 @@ class InfoBar(object):
             (self.dim[0], 40),
             (0, self.dim[1] - 40),
         )
-
 
     def _init_data_params(self):
         """Initializes the content data structures"""
