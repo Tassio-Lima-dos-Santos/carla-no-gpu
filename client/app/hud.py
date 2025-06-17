@@ -96,14 +96,18 @@ class InfoBar(object):
 
     def _init_params(self):
         """Initialized visual parameters such as font text and size"""
-        # SOLUÇÃO: Usar fonte fixa garantida em vez de tentar detectar
-        mono = 'freesans'  # Fonte padrão do PyGame que sempre existe
+        # SOLUÇÃO MELHORADA: Usar SysFont diretamente com fonte segura
+        self._font_mono = pygame.font.SysFont('dejavusansmono', 14)
+        self._header_font = pygame.font.SysFont('dejavusans', 14, bold=True)
         
-        self._font_mono = pygame.font.Font(mono, 14)
-        self._header_font = pygame.font.SysFont("Arial", 14, True)
-        self.help = HelpText(pygame.font.Font(mono, 24), *self.dim)
+        # Usar a mesma fonte mono para o texto de ajuda
+        help_font = pygame.font.SysFont('dejavusansmono', 24)
+        self.help = HelpText(help_font, *self.dim)
+        
+        # Para notificações, usar fonte padrão
+        notification_font = pygame.font.SysFont(None, 20)
         self._notifications = FadingText(
-            pygame.font.Font(pygame.font.get_default_font(), 20),
+            notification_font,
             (self.dim[0], 40),
             (0, self.dim[1] - 40),
         )
